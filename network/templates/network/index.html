@@ -1,0 +1,76 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+    {% if user.is_authenticated %}
+    <div id="new-post-area">
+        <!-- <form action="{% url 'index' %}" method="post"> -->
+        <form>
+            <fieldset>
+                <legend>New Post</legend>
+                {% csrf_token %}
+                {{ post_form }}<br>
+                <input type="submit" class="btn btn-primary" value="Post" id="btn-post">
+            </fieldset>
+        </form><br>
+    </div>
+
+    <div id="all-posts">
+        {% for post in page_obj %}
+        <div class='div-post'>
+            <b id='content-{{ post.id }}' data-id='{{ post.id }}'>{{ post.content }}</b>
+            <textarea id='content-edit-{{ post.id }}' data-id='{{ post.id }}' rows="3", style="display: none;">{{ post.content }}</textarea>
+            <br>
+            <a class='follow-{{ post.user }}' data-user='{{ post.user }}' href="javascript:;">{{ post.user }}</a><br>
+            <a id='edit-{{ post.id }}' data-id='{{ post.id }}' href='javascript:;'>Edit</a> 
+            <a id='save-{{ post.id }}' data-id='{{ post.id }}' href='javascript:;' style="display: none;">Save</a><br>
+            {{ post.timestamp }}<br>
+            <a id='like-{{ post.id }}' data-id='{{ post.id }}' href='javascript:;' style="color: red;">&hearts;</a> <span id='like-num-{{ post.id }}'>{{ post.likes }}</span>
+        </div>
+        <br>
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        <nav aria-label="step-links">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">&laquo; First</a>
+                    </li> 
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                {% endif %}
+        
+                <span class="page-link">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    <span class="sr-only">(current)</span>
+                </span>
+        
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a></li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="1" aria-disabled="true">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+    <div class="full-screen"></div>
+    {% endif %}
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/jquery-3.6.0.slim.min.js' %}"></script>
+    <script src="{% static 'network/index.js' %}"></script>
+{% endblock %}

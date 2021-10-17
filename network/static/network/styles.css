@@ -1,0 +1,40 @@
+a:hover{
+    text-decoration: none !important;
+}
+
+table.post-list {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+    border: 1px solid black;
+    padding: 15px;
+}
+
+.div-post {
+    border: 2px solid gray;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.full-screen {
+    position: fixed;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.full-screen .text {
+    width: 90%;
+    max-width: 500px;
+    max-height: 80%;
+    background: white;
+    padding: 20px;
+    position: relative;
+}

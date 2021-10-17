@@ -1,0 +1,28 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+    {% if user.is_authenticated %}
+    <div id="new-post-area">
+        <!-- <form action="{% url 'index' %}" method="post"> -->
+        <form>
+            <fieldset>
+                <legend>New Post</legend>
+                {% csrf_token %}
+                {{ post_form }}<br>
+                <input type="submit" class="btn btn-primary" value="Post" id="btn-post">
+            </fieldset>
+        </form><br>
+    </div>
+
+    <div id="all-posts"></div>
+    <div class="full-screen"></div>
+    {% endif %}
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/jquery-3.6.0.slim.min.js' %}"></script>
+    <script src="{% static 'network/index.js' %}"></script>
+{% endblock %}
