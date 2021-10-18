@@ -3,17 +3,11 @@
 
 {% block body %}
 
-    {% if user.is_authenticated %}
-    <div id="new-post-area">
-        <!-- <form action="{% url 'index' %}" method="post"> -->
-        <form>
-            <fieldset>
-                <legend>New Post</legend>
-                {% csrf_token %}
-                {{ post_form }}<br>
-                <input type="submit" class="btn btn-primary" value="Post" id="btn-post">
-            </fieldset>
-        </form><br>
+    <div id="profile-area">
+        {% if user.is_authenticated %}
+        <button id="follow">Follow</button> 
+        <button id="follow">Unfollow</button> 
+        {% endif %}
     </div>
 
     <div id="all-posts">
@@ -68,7 +62,7 @@
     </div>
 
     <div class="full-screen"></div>
-    {% endif %}
+    
 
 {% endblock %}
 

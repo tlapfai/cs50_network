@@ -16,16 +16,20 @@ class PostForm(forms.Form):
     content = forms.CharField(widget=forms.Textarea(attrs={'rows':'4', 'cols':'150', 'id':'input-area'}), label='New Post', required=True)
 
 #@login_required
-def index(request):
+def index(request, scope=''):
     # for paginator
-    post_list = Post.objects.all()
+    if scope == 'following':
+        post_list = Post.objects.filter(user__in=request.user.following.all())
+    else:
+        post_list = Post.objects.all()
+
     post_list = post_list.order_by("-timestamp").all()
     paginator = Paginator(post_list, 3)
     page_obj = paginator.get_page(request.GET.get('page'))
     #----------------------
     return render(request, "network/index.html", {
         'post_form': PostForm().as_table(),
-        'page_obj': page_obj
+        'page_obj': page_obj,
         })
 
 
