@@ -4,7 +4,7 @@ from django.db import models
 
 class User(AbstractUser):
     followers = models.ManyToManyField("User", blank=True, related_name="following")
-    profile = models.TextField()
+    profile = models.TextField(max_length=256)
     def followed_by(self, user):
         return (user in self.followers.all())
 

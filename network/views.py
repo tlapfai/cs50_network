@@ -13,10 +13,11 @@ from .models import User, Post
 
 
 class PostForm(forms.Form):
-    content = forms.CharField(widget=forms.Textarea(attrs={'rows':'4', 'cols':'150', 'id':'input-area'}), label='New Post', required=True)
+    content = forms.CharField(widget=forms.Textarea(attrs={'rows':'4', 'cols':'150', 'id':'input-area'}), label=' ', required=True)
 
 #@login_required
 def index(request, scope=''):
+    temp = {}
     # for paginator
     if scope == 'following':
         post_list = Post.objects.filter(user__in=request.user.following.all())
@@ -24,15 +25,16 @@ def index(request, scope=''):
         post_list = Post.objects.all()
     else:
         post_list = Post.objects.filter(user=User.objects.get(id=scope))
+        temp['looking_user'] = User.objects.get(id=scope)
 
     post_list = post_list.order_by("-timestamp").all()
     paginator = Paginator(post_list, 3)
     page_obj = paginator.get_page(request.GET.get('page'))
     #----------------------
-    return render(request, "network/index.html", {
-        'post_form': PostForm().as_table(),
-        'page_obj': page_obj,
-        })
+    temp['post_form'] = PostForm().as_table()
+    temp['page_obj'] = page_obj
+
+    return render(request, "network/index.html", temp)
 
 
 def login_view(request):

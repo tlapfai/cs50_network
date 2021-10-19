@@ -3,22 +3,28 @@
 
 {% block body %}
 
-    {% if user.is_authenticated %}
-    <div id="new-post-area">
-        <!-- <form action="{% url 'index' %}" method="post"> -->
-        <form>
-            <fieldset>
-                <legend>New Post</legend>
-                {% csrf_token %}
-                {{ post_form }}<br>
-                <input type="submit" class="btn btn-primary" value="Post" id="btn-post">
-            </fieldset>
-        </form><br>
-    </div>
-    {% endif %}
-
-    {% if request.path == "/user/1" %}
-    <div id="user-profile">ABC</div>
+    {% if looking_user != None %}
+        <div id="looking-user">
+            <strong>{{ looking_user.username }}</strong><br>
+            <span id="user-profile">{{ looking_user.profile }}</span><br>
+            {% if user.is_authenticated %}
+                <button id="follow-user">Follow</button><br>
+            {% endif %}
+        </div>
+    {% else %}
+        {% if user.is_authenticated %}
+        <div id="new-post-area">
+            <!-- <form action="{% url 'index' %}" method="post"> -->
+            <form>
+                <fieldset>
+                    <legend>New Post</legend>
+                    {% csrf_token %}
+                    {{ post_form }}<br>
+                    <input type="submit" class="btn btn-primary" value="Post" id="btn-post">
+                </fieldset>
+            </form><br>
+        </div>
+        {% endif %}
     {% endif %}
 
     <div id="all-posts">
@@ -72,7 +78,7 @@
         </nav>
     </div>
 
-    <div class="full-screen"></div>
+    <div class="full-screen" style="display: none"></div>
     
 
 {% endblock %}
