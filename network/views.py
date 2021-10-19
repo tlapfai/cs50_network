@@ -20,8 +20,10 @@ def index(request, scope=''):
     # for paginator
     if scope == 'following':
         post_list = Post.objects.filter(user__in=request.user.following.all())
-    else:
+    elif scope == '':
         post_list = Post.objects.all()
+    else:
+        post_list = Post.objects.filter(user=User.objects.get(id=scope))
 
     post_list = post_list.order_by("-timestamp").all()
     paginator = Paginator(post_list, 3)

@@ -9,6 +9,7 @@ urlpatterns = [
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
+    path("user/<int:scope>", views.index, name="user"),
     #API routes
     path("new_post", views.new_post, name="new_post"),
     path("posts/<str:scope>", views.load_posts, name="load_posts"),
