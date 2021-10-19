@@ -15,6 +15,11 @@
             </fieldset>
         </form><br>
     </div>
+    {% endif %}
+
+    {% if request.path == "/user/1" %}
+    <div id="user-profile">ABC</div>
+    {% endif %}
 
     <div id="all-posts">
         {% for post in page_obj %}
@@ -68,7 +73,7 @@
     </div>
 
     <div class="full-screen"></div>
-    {% endif %}
+    
 
 {% endblock %}
 
