@@ -1,44 +1,3 @@
-document.addEventListener('DOMContentLoaded', function() {
-
-    // Use buttons to toggle between views
-    document.querySelector('#btn-post').addEventListener('click', post);
-    $('#following_posts').click(()=>load_posts('following'));
-    
-    // By default
-    //load_posts('all');
-    document.querySelectorAll('[class^="follow-"]').forEach( follow_a => {
-        follow_a.onclick = () => fetch_follow_user(follow_a.dataset.user)
-    });
-
-    document.querySelectorAll('[id^="edit-"]').forEach( edit_a => {
-        edit_a.onclick = () => {
-            $(`#content-${edit_a.dataset.id}`).toggle();
-            $(`#content-edit-${edit_a.dataset.id}`).toggle();
-            $(`#save-${edit_a.dataset.id}`).toggle();
-        }
-    });
-
-    document.querySelectorAll('[id^="save-"]').forEach( a => {
-        a.onclick = () => {
-            edit_post(a.dataset.id);
-            $(`#content-${a.dataset.id}`).show();
-            $(`#content-edit-${a.dataset.id}`).hide();
-            $(`#save-${a.dataset.id}`).hide();
-        }
-    });
-
-    document.querySelectorAll('[id^="like-"]').forEach( a => {
-        a.onclick = () => {
-            fetch('/like_post/' + a.dataset.id)
-                .then(response => response.json())
-                .then(
-                    data => $('#like-num-'+a.dataset.id).text(data.likes));
-        }
-    });
-
-    $('.full-screen').hide();
-});
-
 function post() {
     const $body = document.querySelector('#input-area').value;
     fetch('/new_post', {
@@ -105,3 +64,47 @@ function load_posts(scope) {
             }
         });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    alert('loaded');
+
+    document.querySelector('#btn-post').addEventListener('click', post);
+    $('#following_posts').click(()=>load_posts('following'));
+    
+    document.querySelectorAll('[class^="follow-"]').forEach( b => {
+        b.addEventListener('click', () => {
+            alert('1You followed ' + b.dataset.user);
+            fetch_follow_user(b.dataset.user);
+            alert('fetch');
+        })
+    });
+
+    document.querySelectorAll('[id^="edit-"]').forEach( a => {
+        a.onclick = () => {
+            $(`#content-${a.dataset.id}`).toggle();
+            $(`#content-edit-${a.dataset.id}`).toggle();
+            $(`#save-${a.dataset.id}`).toggle();
+        }
+    });
+
+    document.querySelectorAll('[id^="save-"]').forEach( a => {
+        a.onclick = () => {
+            edit_post(a.dataset.id);
+            $(`#content-${a.dataset.id}`).show();
+            $(`#content-edit-${a.dataset.id}`).hide();
+            $(`#save-${a.dataset.id}`).hide();
+        }
+    });
+
+    document.querySelectorAll('[id^="like-"]').forEach( a => {
+        a.onclick = () => {
+            fetch('/like_post/' + a.dataset.id)
+                .then(response => response.json())
+                .then(
+                    data => $('#like-num-'+a.dataset.id).text(data.likes));
+        }
+    });
+
+    $('.full-screen').hide();
+});

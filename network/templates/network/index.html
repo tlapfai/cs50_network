@@ -6,9 +6,10 @@
     {% if looking_user != None %}
         <div id="looking-user">
             <strong>{{ looking_user.username }}</strong><br>
+            User Profile: <br>
             <span id="user-profile">{{ looking_user.profile }}</span><br>
             {% if user.is_authenticated %}
-                <button id="follow-user">Follow</button><br>
+                <button class="follow-{{ looking_user.username }}" data-user='{{ looking_user.username }}'>Follow</button><br>
             {% endif %}
         </div>
     {% else %}
@@ -33,7 +34,7 @@
             <b id='content-{{ post.id }}' data-id='{{ post.id }}'>{{ post.content }}</b>
             <textarea id='content-edit-{{ post.id }}' data-id='{{ post.id }}' rows="3", style="display: none;">{{ post.content }}</textarea>
             <br>
-            <a class='follow-{{ post.user }}' data-user='{{ post.user }}' href="javascript:;">{{ post.user }}</a><br>
+            <a class='user-{{ post.user }}' data-user='{{ post.user }}' href="{% url 'user' scope=post.user.id %}">{{ post.user }}</a><br>
             {% if post.user.username == user.username %}
                 <a id='edit-{{ post.id }}' data-id='{{ post.id }}' href='javascript:;'>Edit</a> 
                 <a id='save-{{ post.id }}' data-id='{{ post.id }}' href='javascript:;' style="display: none;">Save</a><br>
