@@ -67,16 +67,12 @@ function load_posts(scope) {
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    alert('loaded');
-
-    document.querySelector('#btn-post').addEventListener('click', post);
+    $('#btn-post').click(post);
     $('#following_posts').click(()=>load_posts('following'));
     
     document.querySelectorAll('[class^="follow-"]').forEach( b => {
         b.addEventListener('click', () => {
-            alert('1You followed ' + b.dataset.user);
             fetch_follow_user(b.dataset.user);
-            alert('fetch');
         })
     });
 
@@ -105,6 +101,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     data => $('#like-num-'+a.dataset.id).text(data.likes));
         }
     });
+
+    $('#user-profile-edit-link').click( () => {
+            $(`#user-profile`).toggle();
+            $(`#user-profile-edit`).toggle();
+            $(`#user-profile-save`).toggle();
+        }
+    );
+
+    $('#user-profile-save').click( () => {
+            // call API...
+            $(`#user-profile`).show();
+            $(`#user-profile-edit`).hide();
+            $(`#user-profile-save`).hide();
+        }
+    );
 
     $('.full-screen').hide();
 });

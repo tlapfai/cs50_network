@@ -6,8 +6,14 @@
     {% if looking_user != None %}
         <div id="looking-user">
             <strong>{{ looking_user.username }}</strong><br>
-            User Profile: <br>
-            <span id="user-profile">{{ looking_user.profile }}</span><br>
+            User Profile: 
+            {% if looking_user.username == user.username %}
+                <a id='user-profile-edit-link' href='javascript:;'>Edit</a>
+                <a id='user-profile-save' href='javascript:;', style="display: none;">Save</a>
+            {% endif %}
+            <br>
+            <span id="user-profile">{{ looking_user.profile }}</span>
+            <textarea id='user-profile-edit' rows="3", style="display: none;">{{ looking_user.profile }}</textarea><br>
             {% if user.is_authenticated %}
                 <button class="follow-{{ looking_user.username }}" data-user='{{ looking_user.username }}'>Follow</button><br>
             {% endif %}
@@ -28,7 +34,7 @@
         {% endif %}
     {% endif %}
 
-    <div id="all-posts">
+    <div id="all-posts" class="container">
         {% for post in page_obj %}
         <div class='div-post'>
             <b id='content-{{ post.id }}' data-id='{{ post.id }}'>{{ post.content }}</b>
