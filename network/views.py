@@ -17,6 +17,9 @@ class PostForm(forms.Form):
 
 #@login_required
 def index(request, scope=''):
+    if scope == 0:
+        return index(request, request.user.id)
+
     temp = {}
     # for paginator
     if scope == 'following':
@@ -26,6 +29,7 @@ def index(request, scope=''):
     else:
         post_list = Post.objects.filter(user=User.objects.get(id=scope))
         temp['looking_user'] = User.objects.get(id=scope)
+        temp['follow_btn'] = "Unfollow" if temp['looking_user'].followed_by(request.user) else "Follow"
 
     post_list = post_list.order_by("-timestamp").all()
     paginator = Paginator(post_list, 3)
@@ -168,11 +172,22 @@ def follow_user(request, target_username):
         else:
             if target_user.followed_by(iam):
                 target_user.followers.remove(iam)
-                return JsonResponse({'message': f"You unfollowed {target_user.username}."})
+                return JsonResponse({'message': f"You unfollowed {target_user.username}.", 'btn_label': 'Follow'})
             else:
                 target_user.followers.add(iam)
-                return JsonResponse({'message': f"You followed {target_user.username}."})
+                return JsonResponse({'message': f"You followed {target_user.username}.", 'btn_label': 'Unfollow'})
     else:
         return JsonResponse({ "error": "GET request required." }, status=400)
 
-        
+@login_required
+@csrf_exempt
+def edit_profile(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+
+    data = json.loads(request.body) # data is a dict
+
+    user = request.user
+    user.profile = data.get("profile")
+    user.save()
+    return JsonResponse({ "message": "Profile edited successfully.", "profile_content": user.profile }, status=201)

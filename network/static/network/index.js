@@ -17,6 +17,7 @@ function fetch_follow_user(username) {
     fetch('/follow_user/' + username)
         .then(response => response.json())
         .then(data => {
+            document.querySelector('[class^="follow-"]').innerText = data.btn_label;
             $('.full-screen').empty();
             $('.full-screen').append($(`<div class='text'></div>`).html(`${data.message}<br><a href="javascript:;" class="btn-close">Close</a>`));
             $('.full-screen').show();
@@ -44,6 +45,25 @@ function edit_post(post_id) {
         }
     })
     .then( data => $(`#content-${post_id}`).text(data.content) )
+    .catch( err => alert(err));
+}
+
+function edit_profile() {
+    const $content = document.querySelector(`#user-profile-edit`).value;
+    fetch('/edit_profile', {
+        method: 'POST',
+        body: JSON.stringify({
+            profile: $content
+        })
+    })
+    .then(response => {
+        if (response.status == 403) {
+            throw new Error('You are not this user.');
+        } else {
+            return response.json();
+        }
+    })
+    .then( data => $(`#user-profile`).text(data.profile_content) )
     .catch( err => alert(err));
 }
 
@@ -110,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
     );
 
     $('#user-profile-save').click( () => {
-            // call API...
+            edit_profile();
             $(`#user-profile`).show();
             $(`#user-profile-edit`).hide();
             $(`#user-profile-save`).hide();
